@@ -1,4 +1,4 @@
-package com.salty.bechef.services;
+package com.salty.bechef.service;
 
 import com.salty.bechef.payload.request.AuthenticationRequest;
 import com.salty.bechef.payload.request.RegisterRequest;

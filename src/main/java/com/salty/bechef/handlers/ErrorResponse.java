@@ -1,4 +1,4 @@
-package com.salty.bechef.exceptions;
+package com.salty.bechef.handlers;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

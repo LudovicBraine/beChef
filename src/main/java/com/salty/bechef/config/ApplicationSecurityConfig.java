@@ -1,6 +1,6 @@
 package com.salty.bechef.config;
 
-import com.salty.bechef.repositories.UserRepository;
+import com.salty.bechef.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationSecurityConfig {
     private final UserRepository userRepository;
 
+    /**
+     * we provide an implementation of the UserDetailsService functional interface, which has a loadByUsername method
+     * throws UsernameNotFoundException */
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> userRepository.findByEmail(username)
@@ -41,5 +44,6 @@ public class ApplicationSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
 }

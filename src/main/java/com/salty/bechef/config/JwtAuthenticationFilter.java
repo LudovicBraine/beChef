@@ -1,6 +1,6 @@
 package com.salty.bechef.config;
 
-import com.salty.bechef.services.JwtService;
+import com.salty.bechef.service.JwtService;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,28 +16,48 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 
+/**
+    * Our jwt class extends OnePerRequestFilter to be executed on every http request
+    * We can also implement the Filter interface (jakarta EE), but Spring gives us a OncePerRequestFilter
+        class that extends the GenericFilterBean, which also implements the Filter interface.
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService; /** implementation is provided in config.ApplicationSecurityConfig */
 
     @Override
     protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
+           @NonNull HttpServletRequest request,
+           @NonNull HttpServletResponse response,
+           @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+
+
+        // try to get JWT in cookie or in Authorization Header
+        String jwt = jwtService.getJwtFromCookies(request);
         final String authHeader = request.getHeader("Authorization");
-        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+
+        if((jwt == null && (authHeader ==  null || !authHeader.startsWith("Bearer "))) || request.getRequestURI().contains("/auth")){
             filterChain.doFilter(request, response);
             return;
         }
-        final String jwt = authHeader.substring(7); // after "Bearer "
+
+        // If the JWT is not in the cookies but in the "Authorization" header
+        if (jwt == null && authHeader.startsWith("Bearer ")) {
+            jwt = authHeader.substring(7); // after "Bearer "
+        }
+
+
         final String userEmail =jwtService.extractUserName(jwt);
+        /*
+           SecurityContextHolder: is where Spring Security stores the details of who is authenticated.
+           Spring Security uses that information for authorization.*/
 
         if(StringUtils.isNotEmpty(userEmail)
                 && SecurityContextHolder.getContext().getAuthentication() == null){

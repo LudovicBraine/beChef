@@ -1,6 +1,5 @@
-package com.salty.bechef.entities.security;
+package com.salty.bechef.entities;
 
-import com.salty.bechef.entities.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,10 +13,12 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "refresh_token")
 public class RefreshToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "refreshToken_generator")
+    @SequenceGenerator(name="refreshToken_generator", sequenceName = "refresh_id_sequence", allocationSize = 1)
     private long id;
 
     @ManyToOne
@@ -31,4 +32,5 @@ public class RefreshToken {
     private Instant expiryDate;
 
     public boolean revoked;
+
 }

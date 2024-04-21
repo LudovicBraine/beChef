@@ -11,16 +11,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "user")
-public class User implements UserDetails {
-
+@Table(name = "users")
+public class User implements UserDetails { // make our app User a spring security User
+/*
+    we have two options : implements the UserDetails interface or create a user class that extends User spring class which also
+    implements UserDetails
+ */
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
+    @SequenceGenerator(name="user_generator", sequenceName = "user_id_sequence", allocationSize = 1)
     private Long id;
     private String firstname;
     private String lastname;
@@ -30,6 +35,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    // we should return a list of roles
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();

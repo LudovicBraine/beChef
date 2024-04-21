@@ -1,4 +1,4 @@
-package com.salty.bechef.services;
+package com.salty.bechef.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseCookie;

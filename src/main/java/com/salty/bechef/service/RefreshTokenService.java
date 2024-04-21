@@ -1,6 +1,7 @@
-package com.salty.bechef.services;
+package com.salty.bechef.service;
 
-import com.salty.bechef.entities.security.RefreshToken;
+
+import com.salty.bechef.entities.RefreshToken;
 import com.salty.bechef.payload.request.RefreshTokenRequest;
 import com.salty.bechef.payload.response.RefreshTokenResponse;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,15 +1,16 @@
-package com.salty.bechef.services.impl;
+package com.salty.bechef.service.impl;
 
+
+import com.salty.bechef.entities.RefreshToken;
 import com.salty.bechef.entities.User;
-import com.salty.bechef.entities.security.RefreshToken;
 import com.salty.bechef.enums.TokenType;
-import com.salty.bechef.exceptions.TokenException;
+import com.salty.bechef.exception.TokenException;
 import com.salty.bechef.payload.request.RefreshTokenRequest;
 import com.salty.bechef.payload.response.RefreshTokenResponse;
-import com.salty.bechef.repositories.RefreshTokenRepository;
-import com.salty.bechef.repositories.UserRepository;
-import com.salty.bechef.services.JwtService;
-import com.salty.bechef.services.RefreshTokenService;
+import com.salty.bechef.repository.RefreshTokenRepository;
+import com.salty.bechef.repository.UserRepository;
+import com.salty.bechef.service.JwtService;
+import com.salty.bechef.service.RefreshTokenService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +34,10 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtService jwtService;
 
-    @Value("${application.security.jwt.refresh-token.expiration}")
+    @Value("${jwt.refresh-token.expiration}")
     private long refreshExpiration;
-    @Value("${application.security.jwt.refresh-token.cookie-name}")
+    @Value("${jwt.refresh-token.cookie-name}")
     private String refreshTokenName;
-
     @Override
     public RefreshToken createRefreshToken(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
@@ -69,17 +69,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public ResponseCookie generateRefreshTokenCookie(String token) {
-        return ResponseCookie.from(refreshTokenName, token)
-                .path("/")
-                .maxAge(refreshExpiration/1000) // 15 days in seconds
-                .httpOnly(true)
-                .secure(true)
-                .sameSite("Strict")
-                .build();
-    }
-
-    @Override
     public RefreshTokenResponse generateNewToken(RefreshTokenRequest request) {
         User user = refreshTokenRepository.findByToken(request.getRefreshToken())
                 .map(this::verifyExpiration)
@@ -91,6 +80,17 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                 .accessToken(token)
                 .refreshToken(request.getRefreshToken())
                 .tokenType(TokenType.BEARER.name())
+                .build();
+    }
+
+    @Override
+    public ResponseCookie generateRefreshTokenCookie(String token) {
+        return ResponseCookie.from(refreshTokenName, token)
+                .path("/")
+                .maxAge(refreshExpiration/1000) // 15 days in seconds
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Strict")
                 .build();
     }
 

@@ -1,4 +1,4 @@
-package com.salty.bechef.exceptions;
+package com.salty.bechef.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

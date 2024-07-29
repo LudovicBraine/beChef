@@ -1,6 +1,10 @@
 package com.salty.bechef.controller;
 
 
+import com.salty.bechef.entities.User;
+import com.salty.bechef.entities.dto.UserDTO;
+import com.salty.bechef.exception.NotFoundException;
+import com.salty.bechef.mapper.UserMapper;
 import com.salty.bechef.payload.request.AuthenticationRequest;
 import com.salty.bechef.payload.request.RefreshTokenRequest;
 import com.salty.bechef.payload.request.RegisterRequest;
@@ -9,10 +13,12 @@ import com.salty.bechef.payload.response.RefreshTokenResponse;
 import com.salty.bechef.service.AuthenticationService;
 import com.salty.bechef.service.JwtService;
 import com.salty.bechef.service.RefreshTokenService;
+import com.salty.bechef.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +37,8 @@ public class AuthenticationController {
     private final RefreshTokenService refreshTokenService;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final UserServiceImpl userService;
+    private final UserMapper userMapper;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegisterRequest request) {
@@ -41,6 +49,28 @@ public class AuthenticationController {
                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .header(HttpHeaders.SET_COOKIE,refreshTokenCookie.toString())
                 .body(authenticationResponse);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<UserDTO> getUser() {
+        try {
+            UserDTO userDTO = this.userMapper.userDTOToUser(this.userService.getUserById(2L).orElseThrow());
+            //User user = this.userService.getUserById(1L).orElseThrow();
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new NotFoundException(NotFoundException.NotFoundExceptionType.USER_NOT_FOUND, e);
+        }
+    }
+
+    @GetMapping("/test2")
+    public ResponseEntity<UserDTO> getUser2() {
+        try {
+            //User user = this.userService.getUserById(2L).orElseThrow();
+            UserDTO userDTO = this.userMapper.userDTOToUser(this.userService.getUserById(1L).orElseThrow());
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new NotFoundException(NotFoundException.NotFoundExceptionType.USER_NOT_FOUND, e);
+        }
     }
 
     @PostMapping("/authenticate")

@@ -51,28 +51,6 @@ public class AuthenticationController {
                 .body(authenticationResponse);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<UserDTO> getUser() {
-        try {
-            UserDTO userDTO = this.userMapper.userDTOToUser(this.userService.getUserById(2L).orElseThrow());
-            //User user = this.userService.getUserById(1L).orElseThrow();
-            return new ResponseEntity<>(userDTO, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new NotFoundException(NotFoundException.NotFoundExceptionType.USER_NOT_FOUND, e);
-        }
-    }
-
-    @GetMapping("/test2")
-    public ResponseEntity<UserDTO> getUser2() {
-        try {
-            //User user = this.userService.getUserById(2L).orElseThrow();
-            UserDTO userDTO = this.userMapper.userDTOToUser(this.userService.getUserById(1L).orElseThrow());
-            return new ResponseEntity<>(userDTO, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new NotFoundException(NotFoundException.NotFoundExceptionType.USER_NOT_FOUND, e);
-        }
-    }
-
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         AuthenticationResponse authenticationResponse = authenticationService.authenticate(request);

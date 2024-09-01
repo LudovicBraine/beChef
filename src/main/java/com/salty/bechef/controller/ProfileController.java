@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,14 +26,16 @@ public class ProfileController {
         return new ResponseEntity<>(userTotal, HttpStatus.OK);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<UserDTO> getUser() {
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+
         try {
-            UserDTO userDTO = this.userMapper.userDTOToUser(this.userService.getUserById(2L).orElseThrow());
-            //User user = this.userService.getUserById(1L).orElseThrow();
+            UserDTO userDTO = this.userMapper.userDTOToUser(this.userService.getUserById(id).orElseThrow());
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
         } catch (Exception e) {
             throw new NotFoundException(NotFoundException.NotFoundExceptionType.USER_NOT_FOUND, e);
         }
     }
 }
+

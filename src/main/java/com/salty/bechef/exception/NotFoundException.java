@@ -12,7 +12,8 @@ public class NotFoundException extends ApplicationException {
         LDAP_USER_NOT_FOUND("error.server.notfound.ldap.user.title", "error.server.notfound.ldap.user.msg", null),
         USER_NOT_FOUND("error.server.notfound.user.title", "error.server.notfound.user.msg", "User not found : {0}"),
         NOTIFICATION_PREFERENCE_NOT_FOUND("error.server.notfound.preference.title", "error.server.notfound.preference.msg", "Notification Preference not found : {0}"),
-        BATCH_NOT_FOUND("error.server.notfound.batch.title", "error.server.notfound.batch.msg", "Batch not found : {0}");
+        BATCH_NOT_FOUND("error.server.notfound.batch.title", "error.server.notfound.batch.msg", "Batch not found : {0}"),
+        BOOK_NOT_FOUND("error.server.notfound.book.title", "error.server.notfound.book.msg", "Book not found: {0}");
 
         private String messageKey;
         private String titleKey;

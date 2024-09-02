@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel =  "spring")
+@Mapper(componentModel =  "spring", uses = {PageMapper.class})
 public interface BookMapper  {
 
     @Mapping(target="id", source ="book.id")
@@ -18,7 +18,8 @@ public interface BookMapper  {
     @Mapping(target="modifyAt", source="book.modifyAt")
     @Mapping(target="display", source="book.display")
     @Mapping(target="user", source="book.user")
-    BookDTO bookDtoToBook(Book book);
+    @Mapping(target="pages", source="book.pages")
+    BookDTO bookToBookDTO(Book book);
 
     @InheritInverseConfiguration
     Book bookToBookDTO(BookDTO bookDTO);

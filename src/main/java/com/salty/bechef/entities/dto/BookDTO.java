@@ -1,10 +1,9 @@
 package com.salty.bechef.entities.dto;
 
-import com.salty.bechef.entities.Page;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Data
 public class BookDTO {
@@ -17,5 +16,5 @@ public class BookDTO {
     private LocalDateTime modifyAt;
     private Boolean display;
     private UserDTO user;
-    private Set<Page> pages;
+    private List<PageDTO> pages;
 }

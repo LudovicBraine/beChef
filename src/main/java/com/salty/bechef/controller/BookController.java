@@ -42,7 +42,7 @@ public class BookController {
     public ResponseEntity<BookDTO> getBookById(@PathVariable("id") Long id) {
         try {
             Book book = this.bookService.getBook(id).orElseThrow();
-            BookDTO bookDTO = this.bookMapper.bookDtoToBook(book);
+            BookDTO bookDTO = this.bookMapper.bookToBookDTO(book);
             return new ResponseEntity<>(bookDTO, HttpStatus.OK);
         } catch (Exception e) {
             throw new NotFoundException(NotFoundException.NotFoundExceptionType.BOOK_NOT_FOUND);
@@ -58,7 +58,7 @@ public class BookController {
     @PostMapping()
     public ResponseEntity<BookDTO> saveBook(@RequestBody BookDTO book) {
         Book bookToSave = this.bookService.saveBook(book);
-        BookDTO bookDTO = this.bookMapper.bookDtoToBook(bookToSave);
+        BookDTO bookDTO = this.bookMapper.bookToBookDTO(bookToSave);
 
         return new ResponseEntity<>(bookDTO, HttpStatus.OK);
     }

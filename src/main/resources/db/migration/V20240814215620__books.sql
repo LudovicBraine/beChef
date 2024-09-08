@@ -36,16 +36,16 @@ CREATE TABLE page (
 CREATE INDEX idx_page_user_id ON page(user_id);
 CREATE INDEX idx_page_book_id ON page(book_id);
 
--- CREATE TABLE book_page (
---book_id BIGINT,
---page_id BIGINT,
---PRIMARY KEY (book_id, page_id),
---CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES book(id),
---CONSTRAINT fk_page FOREIGN KEY (page_id) REFERENCES page(id)
---);
+CREATE TABLE book_user (
+book_id BIGINT,
+user_id BIGINT,
+PRIMARY KEY (book_id, user_id),
+CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES book(id),
+CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
 
 -- Créer un index sur la colonne product_id
---CREATE INDEX idx_book_page_book_id ON book_page(book_id);
+CREATE INDEX idx_book_page_book_id ON book_user(book_id);
 
 -- Créer un index sur la colonne category_id
---CREATE INDEX idx_book_page_page_id ON book_page(page_id);
+CREATE INDEX idx_book_user_user_id ON book_user(user_id);

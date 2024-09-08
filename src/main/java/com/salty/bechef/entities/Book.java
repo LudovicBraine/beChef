@@ -51,6 +51,13 @@ public class Book {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<Page> pages = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "book_user",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    List<User> accessUsers;
 }

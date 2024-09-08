@@ -17,4 +17,5 @@ public class BookDTO {
     private Boolean display;
     private UserDTO user;
     private List<PageDTO> pages;
+    private List<UserDTO> accessUser;
 }

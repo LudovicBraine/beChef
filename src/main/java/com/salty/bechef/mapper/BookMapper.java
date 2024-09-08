@@ -19,6 +19,7 @@ public interface BookMapper  {
     @Mapping(target="display", source="book.display")
     @Mapping(target="user", source="book.user")
     @Mapping(target="pages", source="book.pages")
+    @Mapping(target="accessUser", source="book.accessUsers")
     BookDTO bookToBookDTO(Book book);
 
     @InheritInverseConfiguration

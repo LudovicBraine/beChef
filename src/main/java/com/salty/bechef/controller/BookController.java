@@ -4,6 +4,7 @@ import com.salty.bechef.entities.Book;
 import com.salty.bechef.entities.Page;
 import com.salty.bechef.entities.dto.BookDTO;
 import com.salty.bechef.entities.dto.PageDTO;
+import com.salty.bechef.entities.dto.UserDTO;
 import com.salty.bechef.exception.NotFoundException;
 import com.salty.bechef.mapper.BookMapper;
 import com.salty.bechef.mapper.PageMapper;
@@ -84,13 +85,18 @@ public class BookController {
     public ResponseEntity<PageDTO> addPage(@PathVariable("bookId") Long bookId, @RequestBody PageDTO page) {
         Page pageSaved = this.pageService.addPage(bookId ,page);
         PageDTO pageDTO = this.pageMapper.pageToPageDTO(pageSaved);
-        //        PageLightDTO pageLightDTO = this.pageMapper.pageToPageLightDTO(pageSaved);
         return new ResponseEntity<>(pageDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{bookId}/page/{pageId}")
     public ResponseEntity<Void> deleById(@PathVariable("bookId") Long bookId, @PathVariable("pageId") Long pageId){
         this.pageService.deletePageByBookId(bookId, pageId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{bookId}/link")
+    public ResponseEntity<Void> linkUsersToBook(@PathVariable("bookId") Long bookId, @RequestBody List<UserDTO> users) {
+        this.bookService.linkUsersToBook(bookId, users);
         return ResponseEntity.ok().build();
     }
 }

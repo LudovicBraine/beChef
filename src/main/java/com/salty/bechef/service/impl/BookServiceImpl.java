@@ -11,10 +11,12 @@ import com.salty.bechef.repository.UserRepository;
 import com.salty.bechef.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -57,5 +59,22 @@ public class BookServiceImpl implements BookService {
         Book book = this.bookMapper.bookToBookDTO(bookDTO);
 
         return this.bookRepository.save(book);
+    }
+
+    @Override
+    public void linkUsersToBook(Long bookId, List<UserDTO> users) {
+        List<UserDTO> usersListDTO = users.stream()
+                .map(element -> {
+                    User user = this.userRepository.findById(element.getId()).orElseThrow();
+                    if(user != null) {
+                        return element;
+                    }
+                    return null;
+                })
+                .toList();
+        Book book = this.bookRepository.findById(bookId).orElseThrow();
+        List<User> userList = this.userMapper.listUserDTOToListUser(usersListDTO);
+        book.setAccessUsers(userList);
+        this.bookRepository.save(book);
     }
 }
